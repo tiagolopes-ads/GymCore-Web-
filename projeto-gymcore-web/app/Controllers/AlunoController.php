@@ -2,6 +2,17 @@
 
 class AlunoController
 {
+    public function __construct()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location: /login');
+            exit();
+        }
+    }
+
     public function index(): void
     {
         $alunoModel = new AlunoModel();
@@ -25,7 +36,6 @@ class AlunoController
             $plano  = trim($_POST['plano'] ?? 'Mensal');
             $status = trim($_POST['status'] ?? 'Ativo');
 
-            // Validação básica
             if (empty($nome) || empty($email) || empty($cpf)) {
                 $_SESSION['erro'] = "Preencha todos os campos obrigatórios!";
                 header('Location: /alunos/novo');
@@ -95,6 +105,12 @@ class AlunoController
 
     public function excluir(): void
     {
+        if (isset($_SESSION['perfil']) && $_SESSION['perfil'] !== 'admin') {
+            $_SESSION['erro'] = "Acesso negado: Apenas administradores podem excluir registros.";
+            header('Location: /alunos');
+            exit();
+        }
+
         $id = $_GET['id'] ?? null;
         if ($id) {
             $alunoModel = new AlunoModel();

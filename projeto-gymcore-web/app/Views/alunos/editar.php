@@ -1,5 +1,8 @@
-<?php require_once ROOT_PATH . '/app/Views/layouts/header.php'; ?>
-<?php require_once ROOT_PATH . '/app/Views/layouts/sidebar.php'; ?>
+<?php 
+/** @var array $aluno */
+require_once ROOT_PATH . '/app/Views/layouts/header.php';
+require_once ROOT_PATH . '/app/Views/layouts/sidebar.php'; 
+?>
 
 <div class="section-header">
     <div>

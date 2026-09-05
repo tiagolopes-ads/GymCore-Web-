@@ -15,14 +15,26 @@
                 <p>Login com E-mail</p>
             </div>
 
-            <form action="/dashboard" method="GET" class="login-form">
+            <!-- Exibição de Erro de Autenticação -->
+            <?php 
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            if (isset($_SESSION['erro'])): 
+            ?>
+                <div style="padding: 10px; background-color: #f8d7da; color: #721c24; border-radius: 5px; margin-bottom: 15px; font-size: 0.9em;">
+                    <?= $_SESSION['erro']; unset($_SESSION['erro']); ?>
+                </div>
+            <?php endif; ?>
+
+            <form action="/auth/autenticar" method="POST" class="login-form">
                 <div class="input-group">
                     <i class="fa-regular fa-envelope"></i>
-                    <input type="email" placeholder="Email" required>
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
                 <div class="input-group">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" placeholder="Senha" required>
+                    <input type="password" name="senha" placeholder="Senha" required>
                 </div>
 
                 <div class="forgot-pass">

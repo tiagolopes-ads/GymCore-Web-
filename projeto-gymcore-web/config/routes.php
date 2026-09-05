@@ -4,6 +4,7 @@ return [
     '/'                 => ['DashboardController', 'index'],
     '/dashboard'        => ['DashboardController', 'index'],
     '/login'            => ['AuthController', 'login'],
+    '/auth/autenticar'  => ['AuthController', 'autenticar'],
     '/logout'           => ['AuthController', 'logout'],
     
     // Rotas do CRUD de Alunos

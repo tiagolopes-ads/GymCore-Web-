@@ -1,3 +1,10 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$nomeUsuario = $_SESSION['usuario_nome'] ?? 'Visitante';
+$perfilUsuario = (isset($_SESSION['perfil']) && $_SESSION['perfil'] === 'admin') ? 'Admin' : 'Funcionário';
+?>
 <aside class="sidebar">
     <div class="brand">
         <h2>GymCore <span>WEB</span></h2>
@@ -23,7 +30,7 @@
 
     <div class="sidebar-footer">
         <a href="#" class="menu-item"><i class="fa-solid fa-gear"></i> Configurações</a>
-        <a href="/login" class="menu-item logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        <a href="/logout" class="menu-item logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
     </div>
 </aside>
 
@@ -36,10 +43,10 @@
         <div class="user-profile">
             <i class="fa-regular fa-bell badge-icon"></i>
             <div class="user-info">
-                <strong>Tiago Lopes</strong>
-                <span>Admin</span>
+                <strong><?= htmlspecialchars($nomeUsuario) ?></strong>
+                <span><?= $perfilUsuario ?></span>
             </div>
-            <img src="https://ui-avatars.com/api/?name=Tiago+Lopes&background=708216&color=fff" alt="Avatar">
+            <img src="https://ui-avatars.com/api/?name=<?= urlencode($nomeUsuario) ?>&background=708216&color=fff" alt="Avatar">
         </div>
     </header>
     <div class="page-body">
