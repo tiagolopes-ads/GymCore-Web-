@@ -6,7 +6,21 @@
         <h1 class="page-title">Gestão de Alunos</h1>
         <p class="subtitle">Gerencie todos os alunos em um só lugar. Controle o acesso e monitore as atividades.</p>
     </div>
-    <a href="#" class="btn-primary"><i class="fa-solid fa-plus"></i> Nova Matrícula</a>
+    <a href="/alunos/novo" class="btn-primary"><i class="fa-solid fa-plus"></i> Nova Matrícula</a>
+    
+<!-- Bloco de Mensagens de Sucesso e Erro -->
+<?php if (isset($_SESSION['sucesso'])): ?>
+    <div style="padding: 15px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 20px;">
+        <?= $_SESSION['sucesso']; unset($_SESSION['sucesso']); ?>
+    </div>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['erro'])): ?>
+    <div style="padding: 15px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; margin-bottom: 20px;">
+        <?= $_SESSION['erro']; unset($_SESSION['erro']); ?>
+    </div>
+<?php endif; ?>
+
 </div>
 
 <div class="card">
@@ -14,61 +28,42 @@
         <table class="data-table">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Nome Completo</th>
                     <th>Email</th>
-                    <th>Username</th>
-                    <th>Status</th>
+                    <th>CPF</th>
                     <th>Plano</th>
-                    <th>Matrícula</th>
+                    <th>Status</th>
+                    <th>Data Cadastro</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><strong>João Silva</strong></td>
-                    <td>joao.silva@gmail.com</td>
-                    <td>joao77</td>
-                    <td><span class="badge status-ativo">Ativo</span></td>
-                    <td>Mensal</td>
-                    <td>12/04/2024</td>
-                    <td class="table-actions"><i class="fa-solid fa-pen"></i> <i class="fa-solid fa-trash"></i></td>
-                </tr>
-                <tr>
-                    <td><strong>Beatriz Oliveira</strong></td>
-                    <td>beatriz.oliveira@gmail.com</td>
-                    <td>bia659</td>
-                    <td><span class="badge status-inativo">Inativo</span></td>
-                    <td>Anual</td>
-                    <td>27/06/2022</td>
-                    <td class="table-actions"><i class="fa-solid fa-pen"></i> <i class="fa-solid fa-trash"></i></td>
-                </tr>
-                <tr>
-                    <td><strong>Daniel Martins</strong></td>
-                    <td>daniel.martins3@gmail.com</td>
-                    <td>dmartins3</td>
-                    <td><span class="badge status-banido">Banido</span></td>
-                    <td>Anual</td>
-                    <td>08/01/2024</td>
-                    <td class="table-actions"><i class="fa-solid fa-pen"></i> <i class="fa-solid fa-trash"></i></td>
-                </tr>
-                <tr>
-                    <td><strong>Cláudia Helena</strong></td>
-                    <td>claudiahhye@gmail.com</td>
-                    <td>claudiahh</td>
-                    <td><span class="badge status-pendente">Pendente</span></td>
-                    <td>Diário</td>
-                    <td>05/10/2021</td>
-                    <td class="table-actions"><i class="fa-solid fa-pen"></i> <i class="fa-solid fa-trash"></i></td>
-                </tr>
-                <tr>
-                    <td><strong>Marcos Ribeiro</strong></td>
-                    <td>marcosrib777@gmail.com</td>
-                    <td>marcos7</td>
-                    <td><span class="badge status-suspenso">Suspenso</span></td>
-                    <td>Mensal</td>
-                    <td>19/02/2023</td>
-                    <td class="table-actions"><i class="fa-solid fa-pen"></i> <i class="fa-solid fa-trash"></i></td>
-                </tr>
+                <?php if (!empty($alunos)): ?>
+                    <?php foreach ($alunos as $aluno): ?>
+                        <tr>
+                            <td>#<?= htmlspecialchars($aluno['id']) ?></td>
+                            <td><strong><?= htmlspecialchars($aluno['nome']) ?></strong></td>
+                            <td><?= htmlspecialchars($aluno['email']) ?></td>
+                            <td><?= htmlspecialchars($aluno['cpf']) ?></td>
+                            <td><?= htmlspecialchars($aluno['plano']) ?></td>
+                            <td>
+                                <span class="badge status-<?= strtolower($aluno['status']) ?>">
+                                    <?= htmlspecialchars($aluno['status']) ?>
+                                </span>
+                            </td>
+                            <td><?= date('d/m/Y', strtotime($aluno['created_at'])) ?></td>
+                            <td>
+                                <a href="/alunos/editar?id=<?= $aluno['id'] ?>" class="btn-secondary" style="padding: 5px 10px; font-size: 0.9em; margin-right: 5px;"><i class="fa-solid fa-pen"></i></a>
+                                <a href="/alunos/excluir?id=<?= $aluno['id'] ?>" class="btn-primary" style="padding: 5px 10px; font-size: 0.9em; background-color: #dc3545;" onclick="return confirm('Tem certeza que deseja excluir este aluno?');"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 20px;">Nenhum aluno cadastrado no momento.</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>

@@ -1,13 +1,16 @@
 <?php
+session_start(); // Inicia a sessão para mensagens de feedback
 
-// Define a constante da raiz do projeto para evitar erros de caminho (path) no Windows/Linux
-define('ROOT_PATH', dirname(__DIR__));
+// Define a constante da raiz do projeto normalizando as barras para Windows/Linux
+define('ROOT_PATH', str_replace(['/', '\\'], DIRECTORY_SEPARATOR, dirname(__DIR__)));
 
-// Autoload para carregar automaticamente as classes de Core e Controllers
+// Autoload para carregar automaticamente Core, Controllers, Models e Configs
 spl_autoload_register(function ($className) {
     $paths = [
-        ROOT_PATH . '/core/' . $className . '.php',
-        ROOT_PATH . '/app/Controllers/' . $className . '.php',
+        ROOT_PATH . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . $className . '.php',
+        ROOT_PATH . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $className . '.php',
+        ROOT_PATH . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . $className . '.php',
+        ROOT_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $className . '.php',
     ];
 
     foreach ($paths as $path) {
@@ -19,6 +22,6 @@ spl_autoload_register(function ($className) {
 });
 
 // Carrega as rotas e inicia o roteador
-$routes = require_once ROOT_PATH . '/config/routes.php';
+$routes = require_once ROOT_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routes.php';
 $router = new Router($routes);
 $router->dispatch($_SERVER['REQUEST_URI']);
